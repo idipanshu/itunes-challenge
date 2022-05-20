@@ -6,11 +6,11 @@ const { REQUEST_GET_SONGS } = searchContainerTypes;
 const { successGetSongs, failureGetSongs } = searchContainerCreators;
 
 export function* getItunesSongs(action) {
-  const response = yield call(getSongs, action.artistName);
+  const response = yield call(getSongs, action.searchedTerm);
   const { data, ok } = response;
 
   if (ok) {
-    yield put(successGetSongs(data));
+    yield put(successGetSongs(data.results));
   } else {
     yield put(failureGetSongs(data));
   }

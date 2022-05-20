@@ -8,24 +8,24 @@ import { createActions } from 'reduxsauce';
 import get from 'lodash/get';
 
 export const { Types: searchContainerTypes, Creators: searchContainerCreators } = createActions({
-  requestGetSongs: ['artistName'],
+  requestGetSongs: ['searchedTerm'],
   successGetSongs: ['data'],
   failureGetSongs: ['error'],
   clearSongs: []
 });
 
-export const initialState = { artistName: null, songsData: [], songsError: null };
+export const initialState = { searchedTerm: null, songsData: [], songsError: null };
 
 /* eslint-disable default-case, no-param-reassign */
 export const searchContainerReducer = (state = initialState, action) =>
   produce(state, (draft) => {
     switch (action.type) {
       case searchContainerTypes.REQUEST_GET_SONGS:
-        draft.artistName = action.artistName;
+        draft.searchedTerm = action.searchedTerm;
         break;
 
       case searchContainerTypes.CLEAR_SONGS:
-        draft.artistName = null;
+        draft.searchedTerm = null;
         draft.songsData = [];
         draft.songsError = null;
         break;

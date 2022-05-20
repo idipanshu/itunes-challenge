@@ -1,6 +1,6 @@
+import get from 'lodash/get';
 import { createSelector } from 'reselect';
 import { initialState } from './reducer';
-import get from 'lodash/get';
 
 /**
  * Direct selector to the searchContainer state domain
@@ -18,5 +18,5 @@ export const selectItunesData = () =>
 export const selectItunesError = () =>
   createSelector(selectSearchContainerDomain, (substate) => get(substate, 'songsError'));
 
-export const selectArtistName = () =>
-  createSelector(selectSearchContainerDomain, (substate) => get(substate, 'artistName'));
+export const selectSearchedTerm = () =>
+  createSelector(selectSearchContainerDomain, (substate) => get(substate, 'searchedTerm'));
