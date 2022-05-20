@@ -15,6 +15,9 @@ const StyledText = styled.p`
   && {
     ${(props) => props.marginBottom && `margin-bottom: ${props.marginBottom}px;`};
     ${(props) => props.font()};
+    line-height: 2rem;
+    font-size: 1.2rem;
+    font-weight: 400;
   }
 `;
 const getFontStyle = (type) => (fonts.style[type] ? fonts.style[type] : () => {});

@@ -4,7 +4,7 @@ export default {
     exact: true
   },
   songPape: {
-    route: '/:name',
+    route: '/tracks/:trackId',
     exact: true
   }
 };

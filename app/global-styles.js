@@ -10,7 +10,7 @@ const GlobalStyle = createGlobalStyle`
   }
 
   body {
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-family: 'Verdana', Helvetica, Arial, sans-serif;
   }
 
   body.fontLoaded {
@@ -18,7 +18,7 @@ const GlobalStyle = createGlobalStyle`
   }
 
   #app {
-    background-color: #fafafa;
+    background-color: #f2f2f2;
     min-height: 100%;
     min-width: 100%;
   }
@@ -30,6 +30,15 @@ const GlobalStyle = createGlobalStyle`
     font-family: Georgia, Times, 'Times New Roman', serif;
     line-height: 1.5em;
     margin-bottom: 0;
+  }
+
+  .button {
+    background-color: #666;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    color: #e9e9e9;
+    box-shadow: 0 0 3px #555;
   }
 `;
 
