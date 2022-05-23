@@ -2,7 +2,6 @@ import React from 'react';
 import { Card } from 'antd';
 import PropTypes, { bool } from 'prop-types';
 import styled from 'styled-components';
-import { useHistory } from 'react-router-dom';
 import { colors } from '@app/themes';
 import { isUndefined } from 'lodash';
 import { translate } from '@components/IntlGlobalProvider';
@@ -92,10 +91,8 @@ const MusicCard = ({
   artworkUrl100,
   short
 }) => {
-  const history = useHistory();
-
   return (
-    <CustomCard onClick={() => history.push(`/tracks/${trackId}`)}>
+    <CustomCard data-testid="music-card">
       <Heading>
         {!isUndefined(trackName) ? trackName.substring(0, 30) : translate('track_name_unavailable')}{' '}
         {trackExplicitness !== 'notExplicit' && <Explicit>E</Explicit>}

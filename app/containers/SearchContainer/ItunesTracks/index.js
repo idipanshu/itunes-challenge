@@ -57,28 +57,33 @@ export function SearchContainer({
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const loaded = songsData.length > 0 || songsError;
+    const loaded = (songsData && songsData.length > 0) || songsError;
 
     if (loaded) {
       setLoading(false);
     }
   }, [songsData]);
 
-  const handleOnChange = (searchString) => {
+  useEffect(() => {
+    handleOnChange(searchedTerm);
+  }, [searchedTerm]);
+
+  function handleOnChange(searchString) {
     if (!isEmpty(searchString)) {
       dispatchGetItunesTracks(searchString);
       setLoading(true);
     } else {
       dispatchClearItunesTracks();
     }
-  };
+  }
 
-  const debounceOnChange = debounce(handleOnChange, 200);
+  const debounceOnChange = debounce(handleOnChange, 500);
 
   return (
     <Container>
       <SearchCard>
         <InputField
+          data-testid="search-input"
           placeholder={translate('itunes_search_input_placeholder')}
           onChange={(e) => debounceOnChange(e.target.value)}
         />
@@ -113,7 +118,7 @@ const mapStateToProps = createStructuredSelector({
   searchedTerm: selectSearchedTerm()
 });
 
-function mapDispatchToProps(dispatch) {
+export function mapDispatchToProps(dispatch) {
   const { requestGetSongs, clearSongs } = searchContainerCreators;
 
   return {
