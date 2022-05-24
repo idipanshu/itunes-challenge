@@ -8,9 +8,8 @@ import { colors } from '@app/themes';
 import { translate } from '@components/IntlGlobalProvider';
 
 const AudioContainer = styled.div`
-  max-width: ${(props) => (props.width ? `${props.width}%` : 'fit-content')};
+  max-width: '100%';
   border: 1px solid red;
-  padding: 0.5rem;
   margin: 0.5rem auto;
   border-radius: 10px;
   background-color: ${(props) => (props.theme === 'dark' ? '#222' : '#f5f5f5')};
@@ -28,6 +27,7 @@ const CustomCard = styled(Card)`
 
   &:hover {
     background-color: ${colors.primary};
+    transform: scale(1.025);
   }
 `;
 const Heading = styled.h2`
@@ -35,23 +35,26 @@ const Heading = styled.h2`
   color: ${colors.text};
 `;
 const Text = styled.p`
-  margin: 1.2rem 0;
+  margin: 0.7rem 0;
   text-align: justified;
+  font-family: monospace;
   font-weight: 400;
 `;
+const Bold = styled.span`
+  font-weight: bold;
+`;
 const Explicit = styled.span`
-  font-family: sans-serif;
-  font-size: 0.7em;
-  font-weight: 600;
-  padding: 0.2rem;
-  color: #f8f8f8;
+  font-family: Monospace;
+  font-size: 0.9em;
+  padding: 0.2rem 0.4rem;
+  color: ${colors.inverseText};
   background-color: #111;
   border-radius: 5px;
 `;
 const FlexView = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  gap: 0.6rem;
   align-items: center;
 `;
 const Info = styled.div`
@@ -80,6 +83,7 @@ const MusicCard = ({
   trackId,
   currency,
   trackName,
+  artistName,
   previewUrl,
   trackPrice,
   artworkUrl100,
@@ -95,25 +99,30 @@ const MusicCard = ({
           <If condition={!isUndefined(trackName)} otherwise={translate('track_name_unavailable')}>
             {!isUndefined(trackName) && trackName.substring(0, 30)}
           </If>
-
-          <If condition={trackExplicitness !== 'notExplicit'}>
-            <Explicit>E</Explicit>
-          </If>
         </Heading>
       </If>
 
       <FlexView>
+        <AlbumArt src={artworkUrl100} alt="album art" />
+
         <Info>
+          <If condition={trackExplicitness !== 'notExplicit'}>
+            <Explicit>{translate('explicit_content')}</Explicit>
+          </If>
+
+          <Text>{artistName}</Text>
+
           <Text>
-            {trackPrice} {currency}
+            {translate('track_price')}:{' '}
+            <Bold>
+              {trackPrice} {currency}
+            </Bold>
           </Text>
 
           <If condition={short} otherwise={longDescription}>
             <Text>{shortDescription}</Text>
           </If>
         </Info>
-
-        <AlbumArt src={artworkUrl100} alt="album art" />
       </FlexView>
 
       <AudioPlayer source={previewUrl} trackId={trackId} playTrackEvent={playTrackEvent} />
@@ -135,6 +144,7 @@ MusicCard.propTypes = {
   trackName: PropTypes.string,
   trackPrice: PropTypes.number,
   previewUrl: PropTypes.string,
+  artistName: PropTypes.string,
   playTrackEvent: PropTypes.func,
   artworkUrl100: PropTypes.string,
   longDescription: PropTypes.string,
