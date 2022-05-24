@@ -55,6 +55,7 @@ export function SearchContainer({
   songsError
 }) {
   const [loading, setLoading] = useState(false);
+  const [playTrackEvent, setPlayTrackEvent] = useState('');
 
   useEffect(() => {
     const loaded = (songsData && songsData.length > 0) || songsError;
@@ -64,10 +65,6 @@ export function SearchContainer({
     }
   }, [songsData]);
 
-  useEffect(() => {
-    handleOnChange(searchedTerm);
-  }, [searchedTerm]);
-
   function handleOnChange(searchString) {
     if (!isEmpty(searchString)) {
       dispatchGetItunesTracks(searchString);
@@ -75,6 +72,15 @@ export function SearchContainer({
     } else {
       dispatchClearItunesTracks();
     }
+  }
+
+  function handlePlayTrackEvent(trackId) {
+    if (playTrackEvent !== '' && playTrackEvent !== trackId) {
+      const audioElement = document.getElementById(playTrackEvent);
+      audioElement.pause();
+    }
+
+    setPlayTrackEvent(trackId);
   }
 
   const debounceOnChange = debounce(handleOnChange, 500);
@@ -86,6 +92,7 @@ export function SearchContainer({
           data-testid="search-input"
           placeholder={translate('itunes_search_input_placeholder')}
           onChange={(e) => debounceOnChange(e.target.value)}
+          defaultValue={searchedTerm}
         />
       </SearchCard>
 
@@ -94,7 +101,9 @@ export function SearchContainer({
           <For
             of={songsData}
             ParentComponent={GridView}
-            renderItem={(item, index) => <MusicCard short key={index} {...item} loading={loading} />}
+            renderItem={(item, index) => (
+              <MusicCard short key={index} {...item} loading={loading} playTrackEvent={handlePlayTrackEvent} />
+            )}
           />
         </Skeleton>
       </If>

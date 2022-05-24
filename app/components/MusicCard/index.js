@@ -1,9 +1,10 @@
 import React from 'react';
 import { Card } from 'antd';
-import PropTypes, { bool } from 'prop-types';
+import { isEmpty, isUndefined } from 'lodash';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
+import If from '@components/If';
 import { colors } from '@app/themes';
-import { isUndefined } from 'lodash';
 import { translate } from '@components/IntlGlobalProvider';
 
 const AudioContainer = styled.div`
@@ -14,12 +15,7 @@ const AudioContainer = styled.div`
   border-radius: 10px;
   background-color: ${(props) => (props.theme === 'dark' ? '#222' : '#f5f5f5')};
 `;
-const AudioFile = styled.audio`
-  background-color: #f6f6f6;
-`;
-const Source = styled.source`
-  background-color: black;
-`;
+
 const CustomCard = styled(Card)`
   && {
     background-color: ${colors.secondary};
@@ -32,11 +28,11 @@ const CustomCard = styled(Card)`
 
   &:hover {
     background-color: ${colors.primary};
-    transform: scale(1.02);
   }
 `;
 const Heading = styled.h2`
   font-size: 1.2rem;
+  color: ${colors.text};
 `;
 const Text = styled.p`
   margin: 1.2rem 0;
@@ -59,44 +55,52 @@ const FlexView = styled.div`
   align-items: center;
 `;
 const Info = styled.div`
-  color: ${colors.invertColor};
+  color: ${colors.text};
   padding-inline: 0.2rem;
 `;
 const AlbumArt = styled.img`
-  border-radius: 5px;
+  border-radius: 5%;
   width: 150px;
   height: 150px;
 `;
 
-const AudioPlayer = ({ source }) => {
+const AudioPlayer = ({ source, trackId, playTrackEvent }) => {
   return (
     <AudioContainer>
-      <AudioFile autoPlay={false} controls>
-        <Source src={source} type="audio/mp3"></Source>
+      <audio id={trackId} autoPlay={false} controls onPlay={() => playTrackEvent(trackId)}>
+        <source src={source} type="audio/mp3"></source>
         Your browser does not support audio tags
-      </AudioFile>
+      </audio>
     </AudioContainer>
   );
 };
 
 const MusicCard = ({
-  trackExplicitness,
-  trackName,
+  short,
   trackId,
-  shortDescription,
-  longDescription,
-  trackPrice,
-  previewUrl,
   currency,
+  trackName,
+  previewUrl,
+  trackPrice,
   artworkUrl100,
-  short
+  playTrackEvent,
+  longDescription,
+  shortDescription,
+  trackExplicitness
 }) => {
   return (
     <CustomCard data-testid="music-card">
-      <Heading>
-        {!isUndefined(trackName) ? trackName.substring(0, 30) : translate('track_name_unavailable')}{' '}
-        {trackExplicitness !== 'notExplicit' && <Explicit>E</Explicit>}
-      </Heading>
+      <If condition={!isEmpty(trackName)}>
+        <Heading>
+          <If condition={!isUndefined(trackName)} otherwise={translate('track_name_unavailable')}>
+            {!isUndefined(trackName) && trackName.substring(0, 30)}
+          </If>
+
+          <If condition={trackExplicitness !== 'notExplicit'}>
+            <Explicit>E</Explicit>
+          </If>
+        </Heading>
+      </If>
 
       <FlexView>
         <Info>
@@ -104,29 +108,34 @@ const MusicCard = ({
             {trackPrice} {currency}
           </Text>
 
-          <Text>{short ? shortDescription : longDescription}</Text>
+          <If condition={short} otherwise={longDescription}>
+            <Text>{shortDescription}</Text>
+          </If>
         </Info>
 
-        <AlbumArt src={artworkUrl100} />
+        <AlbumArt src={artworkUrl100} alt="album art" />
       </FlexView>
 
-      <AudioPlayer source={previewUrl} />
+      <AudioPlayer source={previewUrl} trackId={trackId} playTrackEvent={playTrackEvent} />
     </CustomCard>
   );
 };
 
 AudioPlayer.propTypes = {
-  source: PropTypes.string
+  source: PropTypes.string,
+  trackId: PropTypes.number,
+  playTrackEvent: PropTypes.func
 };
 
 MusicCard.propTypes = {
-  short: bool,
+  short: PropTypes.bool,
   autoplay: PropTypes.bool,
   trackId: PropTypes.number,
   currency: PropTypes.string,
   trackName: PropTypes.string,
   trackPrice: PropTypes.number,
   previewUrl: PropTypes.string,
+  playTrackEvent: PropTypes.func,
   artworkUrl100: PropTypes.string,
   longDescription: PropTypes.string,
   shortDescription: PropTypes.string,
