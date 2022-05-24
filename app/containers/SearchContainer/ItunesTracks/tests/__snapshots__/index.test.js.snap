@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<SeachContainer /> tests Should render and match snapshot 1`] = `
+exports[`<SeachContainer /> tests should render and match snapshot 1`] = `
 <body>
   <div>
     <div

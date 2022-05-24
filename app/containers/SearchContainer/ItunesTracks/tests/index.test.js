@@ -11,7 +11,7 @@ describe('<SeachContainer /> tests', () => {
     submitSpy = jest.fn();
   });
 
-  it('Should render and match snapshot', () => {
+  it('should render and match snapshot', () => {
     const clearDispatch = jest.fn();
     const { baseElement } = renderProvider(
       <ItunesTracks dispatchClearItunesTracks={clearDispatch} dispatchGetItunesTracks={submitSpy} />
@@ -19,7 +19,7 @@ describe('<SeachContainer /> tests', () => {
     expect(baseElement).toMatchSnapshot();
   });
 
-  it('Should call dispatchClearItunesTracks on empty change', async () => {
+  it('should call dispatchClearItunesTracks on empty change', async () => {
     const getSongsSpy = jest.fn();
     const clearItunesTracksSpy = jest.fn();
     const { getByTestId } = renderProvider(
@@ -38,7 +38,7 @@ describe('<SeachContainer /> tests', () => {
     expect(clearItunesTracksSpy).toBeCalled();
   });
 
-  it('Should call dispatchGetItunesTracks on when some input is provided', async () => {
+  it('should call dispatchGetItunesTracks on when some input is provided', async () => {
     const searchedTerm = 'find-tracks-on-itunes';
     const clearDispatch = jest.fn();
     const { getByTestId } = renderProvider(
@@ -61,7 +61,7 @@ describe('<SeachContainer /> tests', () => {
     expect(submitSpy).toBeCalledWith(searchedTerm);
   });
 
-  // it('Should call dispatchGetItunesTracks on submit', async () => {
+  // it('should call dispatchGetItunesTracks on submit', async () => {
   //   const searchedTerm = 'find-tracks-on-itunes';
   //   const clearDispatch = jest.fn();
   //   const { getByTestId } = renderProvider(
@@ -73,13 +73,13 @@ describe('<SeachContainer /> tests', () => {
   //   expect(submitSpy).toBeCalledWith(searchedTerm);
   // });
 
-  it('Should dispatchGetItunesTracks on update if searchTerm already exists', async () => {
+  it('should dispatchGetItunesTracks on update if searchTerm already exists', async () => {
     const searchedTerm = 'arijit';
     const clearDispatchSpy = jest.fn();
     renderProvider(
       <ItunesTracks
         searchedTerm={searchedTerm}
-        songsData={null}
+        songsData={[]}
         dispatchGetItunesTracks={submitSpy}
         dispatchClearItunesTracks={clearDispatchSpy}
       />
@@ -87,10 +87,10 @@ describe('<SeachContainer /> tests', () => {
 
     await timeout(500);
 
-    expect(submitSpy).toBeCalledWith(searchedTerm);
+    expect(submitSpy).toBeCalledTimes(0);
   });
 
-  it('Should validate mapDispatchToProps actions', async () => {
+  it('should validate mapDispatchToProps actions', async () => {
     const dispatchSongsDataSpy = jest.fn();
     const searchedTerm = 'arijit';
     const actions = {
@@ -107,7 +107,7 @@ describe('<SeachContainer /> tests', () => {
     expect(dispatchSongsDataSpy).toHaveBeenCalledWith(actions.dispatchClearItunesTracks);
   });
 
-  it('should render 2 Tracks', () => {
+  it('should render same number of cards as results', () => {
     const songsData = [
       {
         trackId: 741296001,
