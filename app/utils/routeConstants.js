@@ -3,7 +3,7 @@ export default {
     route: '/',
     exact: true
   },
-  songPape: {
+  trackDetails: {
     route: '/tracks/:trackId',
     exact: true
   }
