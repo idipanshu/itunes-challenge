@@ -9,12 +9,12 @@ import { translate } from '@components/IntlGlobalProvider';
 
 const AudioContainer = styled.div`
   max-width: '100%';
+  margin: auto;
   border: 1px solid red;
   margin: 0.5rem auto;
   border-radius: 10px;
   background-color: ${(props) => (props.theme === 'dark' ? '#222' : '#f5f5f5')};
 `;
-
 const CustomCard = styled(Card)`
   && {
     background-color: ${colors.secondary};
@@ -22,9 +22,8 @@ const CustomCard = styled(Card)`
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(2, 2, 2, 0.4);
     cursor: pointer;
-    transition: transform 300ms ease-in-out;s
+    transition: transform 300ms ease-in-out;
   }
-
   &:hover {
     background-color: ${colors.primary};
     transform: scale(1.025);
@@ -56,6 +55,8 @@ const FlexView = styled.div`
   flex-direction: row;
   gap: 0.6rem;
   align-items: center;
+  height: 175px;
+  overflow: hidden;
 `;
 const Info = styled.div`
   color: ${colors.text};

@@ -43,9 +43,9 @@ const GlobalStyle = createGlobalStyle`
 
   audio {
     max-height: 100%;
-    max-width: 100%;
-    margin: auto;
     object-fit: contain;
+    width: 100%;
+    margin: auto;
   }
 `;
 
