@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<SongDetailsPage /> tests should render and match snapshot 1`] = `
+<body>
+  <div>
+    <div
+      class="TrackDetails__Container-sc-1cwsvw8-0 cleOkp"
+    />
+  </div>
+</body>
+`;

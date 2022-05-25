@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<ProtectedRoute /> should render and match the snapshot 1`] = `
+exports[`<ProtectedRoute /> should render and match the snapshot for <SearchContainer /> 1`] = `
 <body>
   <div>
     <div
@@ -22,6 +22,16 @@ exports[`<ProtectedRoute /> should render and match the snapshot 1`] = `
         </div>
       </div>
     </div>
+  </div>
+</body>
+`;
+
+exports[`<ProtectedRoute /> should render and match the snapshot for <SongDetailsPage /> 1`] = `
+<body>
+  <div>
+    <div
+      class="TrackDetails__Container-sc-1cwsvw8-0 cleOkp"
+    />
   </div>
 </body>
 `;
