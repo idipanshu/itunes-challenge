@@ -4,7 +4,7 @@
  *
  */
 
-import React, { useState, useEffect, memo } from 'react';
+import React, { useState, useEffect, memo, useMemo } from 'react';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -57,6 +57,18 @@ export function SearchContainer({
   const [loading, setLoading] = useState(false);
   const [playTrackEvent, setPlayTrackEvent] = useState('');
 
+  const audioRef = useMemo(() => {
+    if (!songsData) {
+      return;
+    }
+
+    const refs = {};
+    songsData.forEach((track) => {
+      refs[track.trackId] = React.createRef(null);
+    });
+    return refs;
+  }, [songsData]);
+
   useEffect(() => {
     const loaded = (songsData && songsData.length > 0) || songsError;
 
@@ -76,8 +88,7 @@ export function SearchContainer({
 
   function handlePlayTrackEvent(trackId) {
     if (playTrackEvent !== '' && playTrackEvent !== trackId) {
-      const audioElement = document.getElementById(playTrackEvent);
-      audioElement.pause();
+      audioRef[playTrackEvent].current.pause();
     }
 
     setPlayTrackEvent(trackId);
@@ -102,7 +113,14 @@ export function SearchContainer({
             of={songsData}
             ParentComponent={GridView}
             renderItem={(item, index) => (
-              <MusicCard short key={index} {...item} loading={loading} playTrackEvent={handlePlayTrackEvent} />
+              <MusicCard
+                short
+                key={index}
+                {...item}
+                loading={loading}
+                playTrackEvent={handlePlayTrackEvent}
+                reference={audioRef}
+              />
             )}
           />
         </Skeleton>

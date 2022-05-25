@@ -1,6 +1,7 @@
 import React from 'react';
 import { Card } from 'antd';
 import { isEmpty, isUndefined } from 'lodash';
+import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import If from '@components/If';
@@ -8,7 +9,7 @@ import { colors } from '@app/themes';
 import { translate } from '@components/IntlGlobalProvider';
 
 const AudioContainer = styled.div`
-  max-width: '100%';
+  max-width: 100%;
   margin: auto;
   border: 1px solid red;
   margin: 0.5rem auto;
@@ -68,21 +69,11 @@ const AlbumArt = styled.img`
   height: 150px;
 `;
 
-const AudioPlayer = ({ source, trackId, playTrackEvent }) => {
-  return (
-    <AudioContainer>
-      <audio id={trackId} autoPlay={false} controls onPlay={() => playTrackEvent(trackId)}>
-        <source src={source} type="audio/mp3"></source>
-        Your browser does not support audio tags
-      </audio>
-    </AudioContainer>
-  );
-};
-
 const MusicCard = ({
   short,
   trackId,
   currency,
+  reference,
   trackName,
   artistName,
   previewUrl,
@@ -93,11 +84,13 @@ const MusicCard = ({
   shortDescription,
   trackExplicitness
 }) => {
+  const history = useHistory();
+
   return (
-    <CustomCard data-testid="music-card">
-      <If condition={!isEmpty(trackName)}>
+    <CustomCard data-testid="music-card" onClick={() => history.push(`/tracks/${trackId}`)}>
+      <If condition={!isEmpty(trackName)} otherwise={translate('track_name_unavailable')}>
         <Heading>
-          <If condition={!isUndefined(trackName)} otherwise={translate('track_name_unavailable')}>
+          <If condition={short} otherwise={trackName}>
             {!isUndefined(trackName) && trackName.substring(0, 30)}
           </If>
         </Heading>
@@ -126,15 +119,20 @@ const MusicCard = ({
         </Info>
       </FlexView>
 
-      <AudioPlayer source={previewUrl} trackId={trackId} playTrackEvent={playTrackEvent} />
+      <AudioContainer>
+        <audio
+          id={trackId}
+          autoPlay={false}
+          controls
+          onPlay={() => playTrackEvent(trackId)}
+          ref={reference ? reference[trackId] : null}
+        >
+          <source src={previewUrl} type="audio/mp3"></source>
+          Your browser does not support audio tags
+        </audio>
+      </AudioContainer>
     </CustomCard>
   );
-};
-
-AudioPlayer.propTypes = {
-  source: PropTypes.string,
-  trackId: PropTypes.number,
-  playTrackEvent: PropTypes.func
 };
 
 MusicCard.propTypes = {
@@ -143,6 +141,7 @@ MusicCard.propTypes = {
   trackId: PropTypes.number,
   currency: PropTypes.string,
   trackName: PropTypes.string,
+  reference: PropTypes.object,
   trackPrice: PropTypes.number,
   previewUrl: PropTypes.string,
   artistName: PropTypes.string,
