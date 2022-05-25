@@ -10,7 +10,7 @@ import styled from 'styled-components';
 import { injectIntl } from 'react-intl';
 import { fonts, colors } from '@themes';
 import T from '@components/T';
-import logo from '@images/icon-512x512.png';
+import logo from '@images/icon.png';
 const StyledHeader = styled(Layout.Header)`
   && {
     &.ant-layout-header {
@@ -23,9 +23,10 @@ const StyledHeader = styled(Layout.Header)`
   }
 `;
 const Logo = styled.img`
-  height: 5rem;
+  height: 4rem;
   width: auto;
-  margin-top: 1rem;
+  margin-top: 1.4rem;
+  margin-right: 1rem;
 `;
 const Title = styled(T)`
   && {
@@ -33,13 +34,14 @@ const Title = styled(T)`
     ${fonts.dynamicFontSize(fonts.size.xRegular, 1, 0.5)};
     display: flex;
     align-self: center;
+    color: ${colors.text};
   }
 `;
 function Header(props) {
   return (
     <StyledHeader {...props} data-testid="header">
       <Logo alt="logo" src={logo} />
-      <Title type="heading" id="wednesday_solutions" />
+      <Title type="heading" id="heading_text" />
     </StyledHeader>
   );
 }
