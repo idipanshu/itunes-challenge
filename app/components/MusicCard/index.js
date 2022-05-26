@@ -1,24 +1,20 @@
 import React from 'react';
 import { Card } from 'antd';
-import PropTypes, { bool } from 'prop-types';
+import { isEmpty, isUndefined } from 'lodash';
+import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
+import If from '@components/If';
 import { colors } from '@app/themes';
-import { isUndefined } from 'lodash';
 import { translate } from '@components/IntlGlobalProvider';
 
 const AudioContainer = styled.div`
-  max-width: ${(props) => (props.width ? `${props.width}%` : 'fit-content')};
+  max-width: 100%;
+  margin: auto;
   border: 1px solid red;
-  padding: 0.5rem;
   margin: 0.5rem auto;
   border-radius: 10px;
   background-color: ${(props) => (props.theme === 'dark' ? '#222' : '#f5f5f5')};
-`;
-const AudioFile = styled.audio`
-  background-color: #f6f6f6;
-`;
-const Source = styled.source`
-  background-color: black;
 `;
 const CustomCard = styled(Card)`
   && {
@@ -27,106 +23,129 @@ const CustomCard = styled(Card)`
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(2, 2, 2, 0.4);
     cursor: pointer;
-    transition: transform 300ms ease-in-out;s
+    transition: transform 300ms ease-in-out;
   }
-
   &:hover {
     background-color: ${colors.primary};
-    transform: scale(1.02);
+    transform: scale(1.025);
   }
 `;
 const Heading = styled.h2`
   font-size: 1.2rem;
+  color: ${colors.text};
 `;
 const Text = styled.p`
-  margin: 1.2rem 0;
+  margin: 0.7rem 0;
   text-align: justified;
+  font-family: monospace;
   font-weight: 400;
 `;
+const Bold = styled.span`
+  font-weight: bold;
+`;
 const Explicit = styled.span`
-  font-family: sans-serif;
-  font-size: 0.7em;
-  font-weight: 600;
-  padding: 0.2rem;
-  color: #f8f8f8;
+  font-family: Monospace;
+  font-size: 0.9em;
+  padding: 0.2rem 0.4rem;
+  color: ${colors.inverseText};
   background-color: #111;
   border-radius: 5px;
 `;
 const FlexView = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  gap: 0.6rem;
   align-items: center;
+  height: 175px;
+  overflow: hidden;
 `;
 const Info = styled.div`
-  color: ${colors.invertColor};
+  color: ${colors.text};
   padding-inline: 0.2rem;
 `;
 const AlbumArt = styled.img`
-  border-radius: 5px;
+  border-radius: 5%;
   width: 150px;
   height: 150px;
 `;
 
-const AudioPlayer = ({ source }) => {
-  return (
-    <AudioContainer>
-      <AudioFile autoPlay={false} controls>
-        <Source src={source} type="audio/mp3"></Source>
-        Your browser does not support audio tags
-      </AudioFile>
-    </AudioContainer>
-  );
-};
-
 const MusicCard = ({
-  trackExplicitness,
-  trackName,
+  short,
   trackId,
-  shortDescription,
-  longDescription,
-  trackPrice,
-  previewUrl,
   currency,
+  reference,
+  trackName,
+  artistName,
+  previewUrl,
+  trackPrice,
   artworkUrl100,
-  short
+  playTrackEvent,
+  longDescription,
+  shortDescription,
+  trackExplicitness
 }) => {
+  const history = useHistory();
+
   return (
-    <CustomCard data-testid="music-card">
-      <Heading>
-        {!isUndefined(trackName) ? trackName.substring(0, 30) : translate('track_name_unavailable')}{' '}
-        {trackExplicitness !== 'notExplicit' && <Explicit>E</Explicit>}
-      </Heading>
+    <CustomCard data-testid="music-card" onClick={() => history.push(`/tracks/${trackId}`)}>
+      <If condition={!isEmpty(trackName)} otherwise={translate('track_name_unavailable')}>
+        <Heading>
+          <If condition={short} otherwise={trackName}>
+            {!isUndefined(trackName) && trackName.substring(0, 30)}
+          </If>
+        </Heading>
+      </If>
 
       <FlexView>
+        <AlbumArt src={artworkUrl100} alt="album art" />
+
         <Info>
+          <If condition={trackExplicitness !== 'notExplicit'}>
+            <Explicit>{translate('explicit_content')}</Explicit>
+          </If>
+
+          <Text>{artistName}</Text>
+
           <Text>
-            {trackPrice} {currency}
+            {translate('track_price')}:{' '}
+            <Bold>
+              {trackPrice} {currency}
+            </Bold>
           </Text>
 
-          <Text>{short ? shortDescription : longDescription}</Text>
+          <If condition={short} otherwise={longDescription}>
+            <Text>{shortDescription}</Text>
+          </If>
         </Info>
-
-        <AlbumArt src={artworkUrl100} />
       </FlexView>
 
-      <AudioPlayer source={previewUrl} />
+      <AudioContainer>
+        <audio
+          id={trackId}
+          autoPlay={false}
+          controls
+          onPlay={() => playTrackEvent(trackId)}
+          ref={reference ? reference[trackId] : null}
+        >
+          <source src={previewUrl} type="audio/mp3"></source>
+          Your browser does not support audio tags
+        </audio>
+      </AudioContainer>
     </CustomCard>
   );
 };
 
-AudioPlayer.propTypes = {
-  source: PropTypes.string
-};
-
 MusicCard.propTypes = {
-  short: bool,
+  short: PropTypes.bool,
   autoplay: PropTypes.bool,
   trackId: PropTypes.number,
   currency: PropTypes.string,
   trackName: PropTypes.string,
+  reference: PropTypes.object,
   trackPrice: PropTypes.number,
   previewUrl: PropTypes.string,
+  artistName: PropTypes.string,
+  playTrackEvent: PropTypes.func,
   artworkUrl100: PropTypes.string,
   longDescription: PropTypes.string,
   shortDescription: PropTypes.string,

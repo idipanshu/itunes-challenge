@@ -5,21 +5,21 @@
  * That allows to change them more easily later on.
  */
 
-const primary = '#A91079';
-const text = '#F8F8F8';
-const secondary = '#F806CC';
+const primary = '#b59862';
+const text = '#020826';
+const inverseText = '#f8f8f8';
+const secondary = '#f7f0e9';
 const success = '#28a745';
 const error = '#dc3545';
 const gotoStories = '#1890ff';
-const invertColor = '#f8f8f8';
 
 const colors = {
   transparent: 'rgba(0,0,0,0)',
   // Example colors:
   text,
+  inverseText,
   primary,
   secondary,
-  invertColor,
   success,
   error,
   gotoStories,

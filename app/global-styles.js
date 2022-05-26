@@ -18,7 +18,7 @@ const GlobalStyle = createGlobalStyle`
   }
 
   #app {
-    background-color: #f2f2f2;
+    background-color: #f5f1ed;
     min-height: 100%;
     min-width: 100%;
   }
@@ -27,7 +27,7 @@ const GlobalStyle = createGlobalStyle`
   span,
   button,
   label {
-    font-family: Georgia, Times, 'Times New Roman', serif;
+    font-family: sans-serif, Times, 'Times New Roman', serif;
     line-height: 1.5em;
     margin-bottom: 0;
   }
@@ -39,6 +39,13 @@ const GlobalStyle = createGlobalStyle`
     cursor: pointer;
     color: #e9e9e9;
     box-shadow: 0 0 3px #555;
+  }
+
+  audio {
+    max-height: 100%;
+    object-fit: contain;
+    width: 100%;
+    margin: auto;
   }
 `;
 

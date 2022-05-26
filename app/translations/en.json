@@ -1,13 +1,7 @@
 {
-  "repo_list": "Repository List",
-  "repo_search": "Repository Search",
-  "repo_search_default": "Search for a repository by entering it's name in the search box",
-  "get_repo_details": "Get details of repositories",
-  "search_query": "Search query: {repoName}",
-  "matching_repos": "Total number of matching repos: {totalCount}",
+  "search_tracks": "Search What You Like",
   "something_went_wrong": "Sorry. Something went wrong! Please try again in sometime.",
   "stories": "Go to Storybook",
-  "repository_name": "Repository Name: {name}",
   "track_name_unavailable": "Track name is unavailable",
   "heading_text": "Search What You Like",
   "itunes_search_input_placeholder": "Enter name of a song or an artist",
@@ -15,5 +9,6 @@
   "track_genre": "Genre",
   "track_price": "Price",
   "track_collection": "Collection",
-  "track_name": "Track Name"
+  "track_name": "Track Name",
+  "explicit_content": "Explicit Content"
 }

@@ -11,7 +11,7 @@ exports[`<Clickable /> component tests should render and match the snapshot 1`] 
         class="T__StyledText-gjlic1-0 hYHBHB"
         data-testid="t"
       >
-        Repository List
+        Search What You Like
       </p>
     </div>
   </div>

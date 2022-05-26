@@ -9,11 +9,11 @@ describe('iTunes SearchContainer saga test', () => {
   const searchedTerm = 'Sam';
   let getItunesSongsGenerator = getItunesSongs({ searchedTerm });
 
-  it('Should start task to watch for REQUEST_GET_SONGS actions', () => {
+  it('should start task to watch for REQUEST_GET_SONGS actions', () => {
     expect(generator.next().value).toEqual(takeLatest(searchContainerTypes.REQUEST_GET_SONGS, getItunesSongs));
   });
 
-  it('Should ensure that action of type FAILURE_GET_SONGS is dispatched when an API request fails', () => {
+  it('should ensure that action of type FAILURE_GET_SONGS is dispatched when an API request fails', () => {
     const data = getItunesSongsGenerator.next().value;
     expect(data).toEqual(call(getSongs, searchedTerm));
 

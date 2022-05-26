@@ -4,7 +4,7 @@
  *
  */
 
-import React, { useState, useEffect, memo } from 'react';
+import React, { useState, useEffect, memo, useMemo } from 'react';
 import { compose } from 'redux';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -55,6 +55,19 @@ export function SearchContainer({
   songsError
 }) {
   const [loading, setLoading] = useState(false);
+  const [playTrackEvent, setPlayTrackEvent] = useState('');
+
+  const audioRef = useMemo(() => {
+    if (!songsData) {
+      return;
+    }
+
+    const refs = {};
+    songsData.forEach((track) => {
+      refs[track.trackId] = React.createRef(null);
+    });
+    return refs;
+  }, [songsData]);
 
   useEffect(() => {
     const loaded = (songsData && songsData.length > 0) || songsError;
@@ -64,10 +77,6 @@ export function SearchContainer({
     }
   }, [songsData]);
 
-  useEffect(() => {
-    handleOnChange(searchedTerm);
-  }, [searchedTerm]);
-
   function handleOnChange(searchString) {
     if (!isEmpty(searchString)) {
       dispatchGetItunesTracks(searchString);
@@ -75,6 +84,14 @@ export function SearchContainer({
     } else {
       dispatchClearItunesTracks();
     }
+  }
+
+  function handlePlayTrackEvent(trackId) {
+    if (playTrackEvent !== '' && playTrackEvent !== trackId) {
+      audioRef[playTrackEvent].current.pause();
+    }
+
+    setPlayTrackEvent(trackId);
   }
 
   const debounceOnChange = debounce(handleOnChange, 500);
@@ -86,6 +103,7 @@ export function SearchContainer({
           data-testid="search-input"
           placeholder={translate('itunes_search_input_placeholder')}
           onChange={(e) => debounceOnChange(e.target.value)}
+          defaultValue={searchedTerm}
         />
       </SearchCard>
 
@@ -94,7 +112,16 @@ export function SearchContainer({
           <For
             of={songsData}
             ParentComponent={GridView}
-            renderItem={(item, index) => <MusicCard short key={index} {...item} loading={loading} />}
+            renderItem={(item, index) => (
+              <MusicCard
+                short
+                key={index}
+                {...item}
+                loading={loading}
+                playTrackEvent={handlePlayTrackEvent}
+                reference={audioRef}
+              />
+            )}
           />
         </Skeleton>
       </If>
