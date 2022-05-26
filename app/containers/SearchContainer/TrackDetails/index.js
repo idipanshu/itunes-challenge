@@ -22,7 +22,7 @@ import MusicCard from '@components/MusicCard';
 import { translate } from '@components/IntlGlobalProvider';
 import searchContainerSaga from '../saga';
 import { searchContainerCreators } from '../reducer';
-import { selectItunesData, selectItunesError } from '../selectors';
+import { selectItunesData, selectItunesError, selectTrackDetails } from '../selectors';
 
 const Container = styled.div`
   padding: 1rem;
@@ -75,30 +75,28 @@ const Music = styled.div`
   `}
 `;
 
-export function SongDetailsPage({ dispatchGetItunesTracks, songsData, songsError, match }) {
+export function SongDetailsPage({ dispatchGetSongDetails, songsData, trackDetails, songsError, match }) {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState({});
 
+  const trackId = match.params.trackId;
+
   useEffect(() => {
     if (isEmpty(songsData)) {
-      dispatchGetItunesTracks(match.params.trackId);
+      dispatchGetSongDetails(trackId);
       setLoading(true);
     }
   }, []);
 
   useEffect(() => {
-    const loaded = (songsData && songsData.length > 0) || songsError;
+    const loaded = (songsData && Object.keys(songsData).length > 0) || !isEmpty(trackDetails) || songsError;
 
     if (loaded) {
       setLoading(false);
-
-      const index = songsData.findIndex((song) => song.trackId == match.params.trackId);
-
-      if (index !== -1) {
-        setData({ ...songsData[index] });
+      if (songsData[trackId]) {
+        setData({ ...songsData[trackId] });
       } else {
-        dispatchGetItunesTracks(match.params.trackId);
-        setLoading(true);
+        setData(trackDetails);
       }
     }
   }, [songsData]);
@@ -151,22 +149,24 @@ export function SongDetailsPage({ dispatchGetItunesTracks, songsData, songsError
 }
 
 SongDetailsPage.propTypes = {
-  dispatchGetItunesTracks: PropTypes.func,
-  songsData: PropTypes.array,
+  dispatchGetSongDetails: PropTypes.func,
+  trackDetails: PropTypes.object,
   songsError: PropTypes.string,
+  songsData: PropTypes.object,
   match: PropTypes.object
 };
 
 const mapStateToProps = createStructuredSelector({
   songsData: selectItunesData(),
+  trackDetails: selectTrackDetails(),
   songsError: selectItunesError()
 });
 
 export function mapDispatchToProps(dispatch) {
-  const { requestGetSongs } = searchContainerCreators;
+  const { requestGetSongDetails } = searchContainerCreators;
 
   return {
-    dispatchGetItunesTracks: (searchString) => dispatch(requestGetSongs(searchString))
+    dispatchGetSongDetails: (trackId) => dispatch(requestGetSongDetails(trackId))
   };
 }
 

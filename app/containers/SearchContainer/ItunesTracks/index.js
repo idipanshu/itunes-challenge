@@ -16,7 +16,6 @@ import { Card, Input, Skeleton } from 'antd';
 import { createStructuredSelector } from 'reselect';
 import { translate } from '@components/IntlGlobalProvider';
 import If from '@components/If';
-import For from '@components/For';
 import MusicCard from '@components/MusicCard';
 import searchContainerSaga from '../saga';
 import { searchContainerCreators } from '../reducer';
@@ -57,20 +56,22 @@ export function SearchContainer({
   const [loading, setLoading] = useState(false);
   const [playTrackEvent, setPlayTrackEvent] = useState('');
 
+  const tracks = Object.entries(songsData);
+
   const audioRef = useMemo(() => {
     if (!songsData) {
       return;
     }
 
     const refs = {};
-    songsData.forEach((track) => {
-      refs[track.trackId] = React.createRef(null);
+    tracks.map((track) => {
+      refs[track[0]] = React.createRef(null);
     });
     return refs;
   }, [songsData]);
 
   useEffect(() => {
-    const loaded = (songsData && songsData.length > 0) || songsError;
+    const loaded = (songsData && Object.keys(songsData).length > 0) || songsError;
 
     if (loaded) {
       setLoading(false);
@@ -109,20 +110,18 @@ export function SearchContainer({
 
       <If condition={!isEmpty(songsData) || loading}>
         <Skeleton loading={loading} active>
-          <For
-            of={songsData}
-            ParentComponent={GridView}
-            renderItem={(item, index) => (
+          <GridView>
+            {tracks.map((track, index) => (
               <MusicCard
                 short
                 key={index}
-                {...item}
+                {...track[1]}
                 loading={loading}
                 playTrackEvent={handlePlayTrackEvent}
                 reference={audioRef}
               />
-            )}
-          />
+            ))}
+          </GridView>
         </Skeleton>
       </If>
     </Container>
@@ -132,12 +131,14 @@ export function SearchContainer({
 SearchContainer.propTypes = {
   dispatchGetItunesTracks: PropTypes.func,
   dispatchClearItunesTracks: PropTypes.func,
-  songsData: PropTypes.array,
+  songsData: PropTypes.object,
   songsError: PropTypes.string,
   searchedTerm: PropTypes.string
 };
 
-SearchContainer.defaultProps = {};
+SearchContainer.defaultProps = {
+  songsData: {}
+};
 
 const mapStateToProps = createStructuredSelector({
   songsData: selectItunesData(),
