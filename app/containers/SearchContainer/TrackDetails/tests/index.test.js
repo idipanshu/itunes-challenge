@@ -12,14 +12,14 @@ describe('<SongDetailsPage /> tests', () => {
   });
 
   it('should render and match snapshot', () => {
-    const { baseElement } = renderProvider(<SongDetailsPage dispatchGetItunesTracks={submitSpy} match={{ params }} />);
+    const { baseElement } = renderProvider(<SongDetailsPage dispatchGetSongDetails={submitSpy} match={{ params }} />);
     expect(baseElement).toMatchSnapshot();
   });
 
   it('should call dispatchGetItunesTracks when no data is present in the store', async () => {
     const searchedTerm = '11111111111';
 
-    renderProvider(<SongDetailsPage dispatchGetItunesTracks={submitSpy} match={{ params }} />);
+    renderProvider(<SongDetailsPage dispatchGetSongDetails={submitSpy} match={{ params }} />);
 
     await timeout(500);
 
@@ -27,11 +27,9 @@ describe('<SongDetailsPage /> tests', () => {
   });
 
   it('should NOT dispatchGetItunesTracks if matching data is found', async () => {
-    const trackId = '11111111111';
+    const data = { 11111111111: {} };
 
-    renderProvider(
-      <SongDetailsPage songsData={[{ trackId }]} dispatchGetItunesTracks={submitSpy} match={{ params }} />
-    );
+    renderProvider(<SongDetailsPage songsData={{ ...data }} dispatchGetSongDetails={submitSpy} match={{ params }} />);
 
     await timeout(500);
 
@@ -43,11 +41,11 @@ describe('<SongDetailsPage /> tests', () => {
     const trackId = '11111111111';
 
     const actions = {
-      dispatchGetItunesTracks: { searchedTerm: trackId, type: searchContainerTypes.REQUEST_GET_SONGS }
+      dispatchGetSongDetails: { trackId, type: searchContainerTypes.REQUEST_GET_SONG_DETAILS }
     };
 
     const props = mapDispatchToProps(dispatchSongsDataSpy);
-    props.dispatchGetItunesTracks(trackId);
-    expect(dispatchSongsDataSpy).toHaveBeenCalledWith(actions.dispatchGetItunesTracks);
+    props.dispatchGetSongDetails(trackId);
+    expect(dispatchSongsDataSpy).toHaveBeenCalledWith(actions.dispatchGetSongDetails);
   });
 });

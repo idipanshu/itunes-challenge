@@ -22,6 +22,20 @@ describe('SearchContainer Reducer Tests', () => {
     ).toEqual(expectedResult);
   });
 
+  it('should return the initial state when action of type REQUEST_GET_SONG_DETAILS is dispatched', () => {
+    const trackDetails = {};
+    const trackId = null;
+    const expectedResult = { ...state, trackDetails };
+
+    expect(
+      searchContainerReducer(state, {
+        type: searchContainerTypes.REQUEST_GET_SONG_DETAILS,
+        trackDetails,
+        trackId
+      })
+    ).toEqual(expectedResult);
+  });
+
   it('should ensure that songsError has some data and loading = false when action of type FAILURE_GET_SONGS is dispatched', () => {
     const error = 'something_went_wrong';
     const expectedResult = { ...state, songsError: error };
