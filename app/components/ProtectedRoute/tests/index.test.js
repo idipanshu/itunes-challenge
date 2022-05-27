@@ -4,12 +4,17 @@ import ProtectedRoute from '../index';
 import '@testing-library/jest-dom';
 import { Router } from 'react-router-dom';
 import SearchContainer from '@containers/SearchContainer/ItunesTracks';
+import SongDetailsPage from '@containers/SearchContainer/TrackDetails';
 import { createBrowserHistory } from 'history';
 
 jest.mock('@utils/routeConstants', () => {
   return {
     dashboard: {
       route: '/',
+      isProtected: true
+    },
+    details: {
+      route: '/tracks/:trackId',
       isProtected: true
     },
     login: {
@@ -26,12 +31,20 @@ describe('<ProtectedRoute />', () => {
     submitSpy = jest.fn();
   });
 
-  it('should render and match the snapshot', () => {
+  it('should render and match the snapshot for <SearchContainer />', () => {
     const { baseElement } = renderProvider(
       <ProtectedRoute isLoggedIn={true} render={SearchContainer} exact={true} path="/" />
     );
     expect(baseElement).toMatchSnapshot();
   });
+
+  it('should render and match the snapshot for <SongDetailsPage />', () => {
+    const { baseElement } = renderProvider(
+      <ProtectedRoute isLoggedIn={true} render={SongDetailsPage} exact={true} path="/" />
+    );
+    expect(baseElement).toMatchSnapshot();
+  });
+
   it('should not render component if user is not logged in', () => {
     renderProvider(
       <ProtectedRoute isLoggedIn={false} render={SearchContainer} exact={true} path="/" handleLogout={submitSpy} />

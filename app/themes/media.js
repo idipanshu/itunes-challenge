@@ -3,7 +3,7 @@ import { generateMedia } from 'styled-media-query';
 const screenBreakPoints = {
   MOBILE: 320,
   TABLET: 768,
-  DESKTOP: 992
+  DESKTOP: 1000
 };
 
 const media = generateMedia({

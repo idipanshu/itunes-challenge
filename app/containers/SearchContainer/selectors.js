@@ -6,7 +6,7 @@ import { initialState } from './reducer';
  * Direct selector to the searchContainer state domain
  */
 
-export const selectSearchContainerDomain = (state) => state.searchContainer || initialState;
+export const selectSearchContainerDomain = (state) => state.iTunes || initialState;
 
 /**
  * Default selector used by SearchContainer
@@ -20,3 +20,8 @@ export const selectItunesError = () =>
 
 export const selectSearchedTerm = () =>
   createSelector(selectSearchContainerDomain, (substate) => get(substate, 'searchedTerm'));
+
+export const selectTrackDetails = () =>
+  createSelector(selectSearchContainerDomain, (substate) => get(substate, 'trackDetails'));
+
+export const selectTrackId = () => createSelector(selectSearchContainerDomain, (substate) => get(substate, 'trackId'));

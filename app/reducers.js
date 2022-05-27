@@ -13,7 +13,7 @@ export default function createReducer(injectedReducer = {}) {
   const rootReducer = combineReducers({
     ...injectedReducer,
     language: languageProviderReducer,
-    searchContainer: searchContainerReducer
+    iTunes: searchContainerReducer
   });
 
   return rootReducer;
