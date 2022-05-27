@@ -109,7 +109,7 @@ module.exports = require('./webpack.config.base')({
     }),
 
     new WebpackPwaManifest({
-      name: 'React Template',
+      name: 'iTunes Track Finder',
       short_name: 'React T',
       description: 'Wednesday React Template!',
       background_color: '#fafafa',
@@ -118,11 +118,11 @@ module.exports = require('./webpack.config.base')({
       ios: true,
       icons: [
         {
-          src: path.resolve('app/images/icon-512x512.png'),
+          src: path.resolve('app/images/icon.png'),
           sizes: [72, 96, 128, 144, 192, 384, 512]
         },
         {
-          src: path.resolve('app/images/icon-512x512.png'),
+          src: path.resolve('app/images/icon.png'),
           sizes: [120, 152, 167, 180],
           ios: true
         }
